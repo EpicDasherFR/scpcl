@@ -2082,6 +2082,121 @@ End Type
 Global ClosestDoor.Doors
 Global SelectedDoor.Doors
 
+Function CreateDoor2.Doors(x#, y#, z#, angle#, room.Rooms, dopen% = False,  big% = False, keycard$ = "", locked% = False, useCollisionMesh% = False)
+	Local d.Doors, parent, i%
+	If room <> Null Then parent = room\obj
+	
+	Local d2.Doors
+	
+	d.Doors = New Doors
+	If big=1 Then
+		d\obj = CopyEntity(BigDoorOBJ[0])
+		ScaleEntity(d\obj, 55 * RoomScale, 55 * RoomScale, 55 * RoomScale)
+		d\obj2 = CopyEntity(BigDoorOBJ[1])
+		ScaleEntity(d\obj2, 55 * RoomScale, 55 * RoomScale, 55 * RoomScale)
+		
+		d\frameobj = CopyEntity(DoorColl)				
+		ScaleEntity(d\frameobj, RoomScale, RoomScale, RoomScale)
+		EntityType d\frameobj, HIT_MAP
+		EntityAlpha d\frameobj, 0.0
+	ElseIf big=2 Then
+		d\obj = CopyEntity(HeavyDoorObj[0])
+		ScaleEntity(d\obj, RoomScale, RoomScale, RoomScale)
+		d\obj2 = CopyEntity(HeavyDoorObj[1])
+		ScaleEntity(d\obj2, RoomScale, RoomScale, RoomScale)
+		
+		d\frameobj = CopyEntity(DoorFrameOBJ)
+	ElseIf big=3 Then
+		For d2 = Each Doors
+			If d2 <> d And d2\dir = 3 Then
+				d\obj = CopyEntity(d2\obj)
+				d\obj2 = CopyEntity(d2\obj2)
+				ScaleEntity d\obj, RoomScale, RoomScale, RoomScale
+				ScaleEntity d\obj2, RoomScale, RoomScale, RoomScale
+				Exit
+			EndIf
+		Next
+		If d\obj=0 Then
+			d\obj = LoadMesh_Strict("GFX\map\elevatordoor.b3d")
+			d\obj2 = CopyEntity(d\obj)
+			ScaleEntity d\obj, RoomScale, RoomScale, RoomScale
+			ScaleEntity d\obj2, RoomScale, RoomScale, RoomScale
+		EndIf
+		d\frameobj = CopyEntity(DoorFrameOBJ)
+	Else
+		d\obj = CopyEntity(DoorOBJ)
+		ScaleEntity(d\obj, (204.0 * RoomScale) / MeshWidth(d\obj), 312.0 * RoomScale / MeshHeight(d\obj), 16.0 * RoomScale / MeshDepth(d\obj))
+		
+		d\frameobj = CopyEntity(DoorFrameOBJ)
+		d\obj2 = CopyEntity(DoorOBJ)
+		
+		ScaleEntity(d\obj2, (204.0 * RoomScale) / MeshWidth(d\obj), 312.0 * RoomScale / MeshHeight(d\obj), 16.0 * RoomScale / MeshDepth(d\obj))
+	EndIf
+	
+	PositionEntity(d\frameobj, x, y, z)
+	ScaleEntity(d\frameobj, RoomScale, RoomScale, RoomScale)
+	EntityPickMode(d\frameobj, 2)
+	
+	PositionEntity(d\obj, x, y, z)
+	RotateEntity(d\obj, 0.0, angle, 0.0)
+	EntityType(d\obj, HIT_MAP)
+	EntityPickMode(d\obj, 2)
+	MakeCollBox(d\obj)
+	EntityParent(d\obj, parent)
+	
+	If d\obj2 <> 0 Then
+		PositionEntity(d\obj2, x, y, z)
+		RotateEntity(d\obj2, 0.0, angle + ((big <> 1) * 180.0), 0.0)
+		EntityType(d\obj2, HIT_MAP)
+		EntityPickMode(d\obj2, 2)
+		MakeCollBox(d\obj2)
+		EntityParent(d\obj2, parent)
+	EndIf
+	
+	For i% = 0 To 1
+		d\buttons[i]= CopyEntity(ButtonOBJ)
+		;If keycard="0" Then
+		;	d\buttons[i]= CopyEntity(ButtonOBJ)
+		;Else
+		;	d\buttons[i]= CopyEntity(ButtonKeyOBJ)
+		;EndIf
+		
+		;If d\locked = True Then
+		;	EntityTexture d\buttons[i], ButtonLockdown
+		;Else
+		;	EntityTexture d\buttons[i], Button
+		;EndIf
+		
+		ScaleEntity(d\buttons[i], 0.03, 0.03, 0.03)
+		
+		PositionEntity(d\buttons[i], x + ((big <> 1) * (0.6 + (i * (-1.2)))) + ((big = 1) * ((-432.0 + (i * 864.0)) * RoomScale)), y + 0.7, z + ((big <> 1) * ((-0.1) + (i * 0.2))) + ((big = 1) * ((192.0 + (i * (-384.0)))) * RoomScale))
+		RotateEntity(d\buttons[i], 0.0, ((big <> 1) * (i * 180.0)) + ((big = 1) * (90.0 + (i * 180.0))), 0.0)
+		EntityParent(d\buttons[i], d\frameobj)
+		EntityPickMode(d\buttons[i], 2)
+	Next
+	
+	RotateEntity(d\frameobj, 0.0, angle, 0.0)
+	EntityParent(d\frameobj, parent)
+	
+	d\ID = DoorTempID
+	DoorTempID=DoorTempID+1
+	
+	d\KeyCard = keycard
+	
+	d\angle = angle
+	d\open = dopen
+	
+	d\locked = locked
+	
+	If d\open And big = False And Rand(8) = 1 Then d\AutoClose = True
+	d\dir=big
+	d\room=room
+	
+	d\MTFClose = True
+	
+	Return d
+End Function
+
 Function CreateDoor.Doors(x#, y#, z#, angle#, room.Rooms, dopen% = False,  big% = False, keycard% = False, code$="", useCollisionMesh% = False)
 	Local d.Doors, parent, i%
 	If room <> Null Then parent = room\obj
@@ -2681,22 +2796,23 @@ Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
 			EndIf
 			Return
 		Else
-			Select SelectedItem\itemtemplate\tempname
-				Case "key1"
-					temp = 1
-				Case "key2"
-					temp = 2
-				Case "key3"
-					temp = 3
-				Case "key4"
-					temp = 4
-				Case "key5"
-					temp = 5
-				Case "key6"
-					temp = 6
-				Default 
-					temp = -1
-			End Select
+			GetKeycardPerms()
+			;Select SelectedItem\itemtemplate\tempname
+			;	Case "key1"
+			;		temp = 1
+			;	Case "key2"
+			;		temp = 2
+			;	Case "key3"
+			;		temp = 3
+			;	Case "key4"
+			;		temp = 4
+			;	Case "key5"
+			;		temp = 5
+			;	Case "key6"
+			;		temp = 6
+			;	Default 
+			;		temp = -1
+			;End Select
 			
 			If temp =-1 Then 
 				If showmsg = True Then
@@ -6609,6 +6725,12 @@ Function FillRoom(r.Rooms)
 			PositionEntity r\Levers[0],r\x+205.0*RoomScale,r\y+200.0*RoomScale,r\z+2287.0*RoomScale
 			EntityParent r\Levers[0],r\obj
 			;[End Block]
+			
+		; // Mod rooms
+		Case "test"
+			;[Block]
+			d = CreateDoor2(r\x + 0.0 * RoomScale, 0, r\z + 0.0 * RoomScale, 0, r, False, 0, 1, False)
+			;[End Block]
 	End Select
 	
 	For lt.lighttemplates = Each LightTemplates
@@ -7553,7 +7675,14 @@ Function CreateMap()
 		
 		For x = MapSize To 0 Step -1
 			If MapTemp(x,y) > 0 Then
-				If zone = 2 Then temp=2 Else temp=0
+				Select zone
+					Case 1
+						temp=0
+					Case 2
+						temp=2
+					Case 3
+						temp=0
+				End Select
 				
 				For r.Rooms = Each Rooms
 					r\angle = WrapAngle(r\angle)
@@ -8016,6 +8145,5 @@ Type Dummy1499
 	Field anim%
 	Field obj%
 End Type
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
