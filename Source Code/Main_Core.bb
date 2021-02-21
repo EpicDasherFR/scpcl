@@ -9,6 +9,12 @@ If Len(InitErrorStr)>0 Then
 	RuntimeError "The following DLLs were not found in the game directory:"+Chr(13)+Chr(10)+Chr(13)+Chr(10)+InitErrorStr
 EndIf
 
+Global selectedLanguage$
+selectedLanguage = "EN"
+Global loadingasset$
+
+Include "Source Code\Language_Core.bb"
+Include "Source Code\Keycards_Core.bb"
 Include "Source Code\Keys_Core.bb"
 Include "Source Code\INI_Core.bb"
 Include "Source Code\Math_Core.bb"
@@ -19,6 +25,8 @@ Include "Source Code\Devil_Particle_Core.bb"
 Global Font1%, Font2%, Font3%, Font4%, Font5%
 Global ConsoleFont%
 
+Const CreatorName$ = "Thaumiel Studios"
+Const ModVersion$ = "1.0"
 Const VersionNumber$ = "1.3.11"
 Global CompatibleNumber$ = "1.3.11" ;Only change this if the version given isn't working with the current build version - ENDSHN
 
@@ -123,7 +131,7 @@ Global CursorIMG% = LoadImage_Strict("GFX\cursor.png")
 
 Global SelectedLoadingScreen.LoadingScreens, LoadingScreenAmount%, LoadingScreenText%
 Global LoadingBack% = LoadImage_Strict("Loadingscreens\loadingback.jpg")
-InitLoadingScreens("Loadingscreens\loadingscreens.ini")
+InitLoadingScreens("Languages\"+selectedLanguage+"\Loadingscreens.ini")
 
 InitAAFont()
 ;For some reason, Blitz3D doesn't load fonts that have filenames that
@@ -144,6 +152,7 @@ AASetFont Font2
 
 Global BlinkMeterIMG% = LoadImage_Strict("GFX\blinkmeter.jpg")
 
+loadingasset = "Loading variables"
 DrawLoading(0, True)
 
 Global viewport_center_x% = GraphicWidth / 2, viewport_center_y% = GraphicHeight / 2
@@ -1460,16 +1469,19 @@ Global KeypadHUD
 
 Global Panel294, Using294%, Input294$
 
+loadingasset = "Loading items and particles"
 DrawLoading(35, True)
 
 Include "Source Code\Items_Core.bb"
 
 Include "Source Code\Particles_Core.bb"
 
+loadingasset = "Loading map"
 DrawLoading(40,True)
 
 Include "Source Code\Map_Core.bb"
 
+loadingasset = "Loading NPCs and events"
 DrawLoading(80,True)
 
 Include "Source Code\NPCs_Core.bb"
@@ -1484,6 +1496,7 @@ Collisions HIT_178, HIT_MAP, 2, 2
 Collisions HIT_178, HIT_178, 1, 3
 Collisions HIT_DEAD, HIT_MAP, 2, 2
 
+loadingasset = "Loading variables"
 DrawLoading(90, True)
 
 Global FogTexture%, Fog%
@@ -3409,9 +3422,13 @@ Function DrawGUI()
 		If SelectedItem <> Null Then
 			If MouseDown1 Then
 				If MouseSlot = 66 Then
+					MaskImage SelectedItem\invimg,255,0,255
 					DrawImage(SelectedItem\invimg, ScaledMouseX() - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
+					MaskImage SelectedItem\invimg,255,0,255
 				ElseIf SelectedItem <> PrevOtherOpen\SecondInv[MouseSlot]
+					MaskImage SelectedItem\invimg,255,0,255
 					DrawImage(SelectedItem\invimg, ScaledMouseX() - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, ScaledMouseY() - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
+					MaskImage SelectedItem\invimg,255,0,255
 				EndIf
 			Else
 				If MouseSlot = 66 Then
@@ -5187,6 +5204,11 @@ Function DrawGUI()
 						SelectedItem = Null
 					EndIf
 					;[End Block]
+				Case "keyjanitor", "keyscientist", "keysupervisor", "keyengineer", "keyguard", "keycadet", "keylieutenant", "keycommander", "keyzmanager", "keyfmanager", "keychaos", "keyO5"
+					;[Block]
+					MaskImage(SelectedItem\itemtemplate\invimg,255,0,255)
+					DrawImage(SelectedItem\itemtemplate\invimg, GraphicWidth / 2 - ImageWidth(SelectedItem\itemtemplate\invimg) / 2, GraphicHeight / 2 - ImageHeight(SelectedItem\itemtemplate\invimg) / 2)
+					;[End Block]
 				Default
 					;[Block]
 					;check if the item is an inventory-type object
@@ -5953,8 +5975,8 @@ End Function
 Function LoadEntities()
 	CatchErrors("Uncaught (LoadEntities)")
 	
+	loadingasset = "Loading entities"
 	DrawLoading(0)
-	
 	Local i%
 	
 	For i=0 To 9
@@ -6159,6 +6181,7 @@ Function LoadEntities()
 	HideEntity LeverOBJ
 	
 	DrawLoading(15)
+	loadingasset = "Loading images"
 	
 	For i = 0 To 5
 		GorePics[i] = LoadTexture_Strict("GFX\895pics\pic" + (i + 1) + ".jpg")
@@ -6418,6 +6441,7 @@ Function InitNewGame()
 	
 	Local i%, de.Decals, d.Doors, it.Items, r.Rooms, sc.SecurityCams, e.Events
 	
+	loadingasset = "Loading assets"
 	DrawLoading(45)
 	
 	SelectedEnding = -1
@@ -6461,6 +6485,7 @@ Function InitNewGame()
 		EntityParent(it\collider, 0)
 	Next
 	
+	loadingasset = "Loading rooms"
 	DrawLoading(80)
 	For sc.SecurityCams= Each SecurityCams
 		sc\angle = EntityYaw(sc\obj) + sc\angle
@@ -8306,6 +8331,5 @@ Function ResetInput()
 	GrabbedEntity = 0
 	Input_ResetTime# = 10.0
 End Function
-
 ;~IDEal Editor Parameters:
 ;~C#Blitz3D
