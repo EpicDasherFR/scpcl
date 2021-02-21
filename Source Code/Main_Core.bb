@@ -2543,19 +2543,19 @@ Function MovePlayer()
 		
 		RotateEntity Collider, WrapAngle(EntityPitch(Camera)), WrapAngle(EntityYaw(Camera)), 0
 		
-		temp2 = temp2 * NoClipSpeed
+		Temp2 = Temp2 * NoClipSpeed
 		
-		If KeyDown(KEY_DOWN) Then MoveEntity Collider, 0, 0, -temp2*FPSfactor
-		If KeyDown(KEY_UP) Then MoveEntity Collider, 0, 0, temp2*FPSfactor
+		If KeyDown(KEY_DOWN) Then MoveEntity Collider, 0, 0, -Temp2*FPSfactor
+		If KeyDown(KEY_UP) Then MoveEntity Collider, 0, 0, Temp2*FPSfactor
 		
-		If KeyDown(KEY_LEFT) Then MoveEntity Collider, -temp2*FPSfactor, 0, 0
-		If KeyDown(KEY_RIGHT) Then MoveEntity Collider, temp2*FPSfactor, 0, 0	
+		If KeyDown(KEY_LEFT) Then MoveEntity Collider, -Temp2*FPSfactor, 0, 0
+		If KeyDown(KEY_RIGHT) Then MoveEntity Collider, Temp2*FPSfactor, 0, 0	
 		
 		ResetEntity Collider
 	Else
-		temp2# = temp2 / Max((Injuries+3.0)/3.0,1.0)
+		Temp2# = Temp2 / Max((Injuries+3.0)/3.0,1.0)
 		If Injuries > 0.5 Then 
-			temp2 = temp2*Min((Sin(Shake/2)+1.2),1.0)
+			Temp2 = Temp2*Min((Sin(Shake/2)+1.2),1.0)
 		EndIf
 		
 		temp = False
@@ -2585,7 +2585,7 @@ Function MovePlayer()
 		angle = WrapAngle(EntityYaw(Collider,True)+angle+90.0)
 		
 		If temp Then 
-			CurrSpeed = CurveValue(temp2, CurrSpeed, 20.0)
+			CurrSpeed = CurveValue(Temp2, CurrSpeed, 20.0)
 		Else
 			CurrSpeed = Max(CurveValue(0.0, CurrSpeed-0.1, 1.0),0.0)
 		EndIf
@@ -2632,13 +2632,13 @@ Function MovePlayer()
 	ForceMove = False
 	
 	If Injuries > 1.0 Then
-		temp2 = Bloodloss
+		Temp2 = Bloodloss
 		BlurTimer = Max(Max(Sin(MilliSecs2()/100.0)*Bloodloss*30.0,Bloodloss*2*(2.0-CrouchState)),BlurTimer)
 		If (Not I_427\Using And I_427\Timer < 70*360) Then
 			Bloodloss = Min(Bloodloss + (Min(Injuries,3.5)/300.0)*FPSfactor,100)
 		EndIf
 		
-		If temp2 <= 60 And Bloodloss > 60 Then
+		If Temp2 <= 60 And Bloodloss > 60 Then
 			Msg = "You are feeling faint from the amount of blood you have lost."
 			MsgTimer = 70*4
 		EndIf

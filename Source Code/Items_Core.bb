@@ -1,5 +1,7 @@
 Global BurntNote%
 
+Global keychaosframe% = 0, keychaosstate% = 1
+
 Const MaxItemAmount% = 10
 Global ItemAmount%
 Global Inventory.Items[11]
@@ -43,6 +45,8 @@ Function CreateItemTemplate.ItemTemplates(name$, tempname$, objpath$, invimgpath
 	it\objpath = objpath
 	
 	Local texture%
+	
+	If tempname = "paper" Then texturepath = imgpath
 	
 	If texturepath <> "" Then
 		For it2.itemtemplates = Each ItemTemplates
@@ -282,21 +286,21 @@ Function InitItemTemplates()
 	
 	; // CL Items
 	it = CreateItemTemplate("Janitor Keycard", "keyjanitor",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyjanitor.jpg", "", 0.0004,"GFX\items\keycards\janitor.png")
-	;it = CreateItemTemplate("Scientist Keycard", "keyscientist",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyscientist.jpg", "", 0.0004,"GFX\items\keycards\scientist.png")
-	;it = CreateItemTemplate("Research Supervisor Keycard", "keysupervisor",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeysupervisor.jpg", "", 0.0004,"GFX\items\keycards\supervisor.png")
-	;it = CreateItemTemplate("Containment Engineer Keycard", "keyengineer",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyengineer.jpg", "", 0.0004,"GFX\items\keycards\engineer.png")
+	it = CreateItemTemplate("Scientist Keycard", "keyscientist",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyscientist.jpg", "", 0.0004,"GFX\items\keycards\scientist.png")
+	it = CreateItemTemplate("Research Supervisor Keycard", "keysupervisor",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeysupervisor.jpg", "", 0.0004,"GFX\items\keycards\supervisor.png")
+	it = CreateItemTemplate("Containment Engineer Keycard", "keyengineer",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyengineer.jpg", "", 0.0004,"GFX\items\keycards\engineer.png")
 	
-	;it = CreateItemTemplate("Guard Keycard", "keyguard",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyguard.jpg", "", 0.0004,"GFX\items\keycards\guard.png")
-	;it = CreateItemTemplate("NTF Cadet Keycard", "keycadet",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeycadet.jpg", "", 0.0004,"GFX\items\keycards\cadet.png")
-	;it = CreateItemTemplate("NTF Lieutenant Keycard", "keylieutenant",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeylieutenant.jpg", "", 0.0004,"GFX\items\keycards\lieutenant.png")
-	;it = CreateItemTemplate("NTF Commander", "keycommander",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeycommander.jpg", "", 0.0004,"GFX\items\keycards\commander.png")
+	it = CreateItemTemplate("Guard Keycard", "keyguard",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyguard.jpg", "", 0.0004,"GFX\items\keycards\guard.png")
+	it = CreateItemTemplate("MTF Cadet Keycard", "keycadet",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeycadet.jpg", "", 0.0004,"GFX\items\keycards\cadet.png")
+	it = CreateItemTemplate("MTF Lieutenant Keycard", "keylieutenant",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeylieutenant.jpg", "", 0.0004,"GFX\items\keycards\lieutenant.png")
+	it = CreateItemTemplate("MTF Commander Keycard", "keycommander",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeycommander.jpg", "", 0.0004,"GFX\items\keycards\commander.png")
 	
-	;it = CreateItemTemplate("Zone Manager Keycard", "keyzmanager",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyzmanager.jpg", "", 0.0004,"GFX\items\keycards\zmanager.png")
-	;it = CreateItemTemplate("Facility Manager Keycard", "keyfmanager",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyfmanager.jpg", "", 0.0004,"GFX\items\keycards\fmanager.png")
+	it = CreateItemTemplate("Zone Manager Keycard", "keyzmanager",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyzmanager.jpg", "", 0.0004,"GFX\items\keycards\zmanager.png")
+	it = CreateItemTemplate("Facility Manager Keycard", "keyfmanager",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyfmanager.jpg", "", 0.0004,"GFX\items\keycards\fmanager.png")
 	
-	;it = CreateItemTemplate("Chaos Insurgency Access Device", "keychaos",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeychaos.jpg", "", 0.0004,"GFX\items\keycards\chaos_"+keychaosframe+".png")
+	;it = CreateItemTemplate("Chaos Insurgency Access Device", "keychaos",  "GFX\items\Keycards\chaos\chaos-device_cl.x", "GFX\items\Inventory\INVkeychaos.jpg", "", 0.0004,"GFX\items\keycards\chaos_0.png")
 	
-	;it = CreateItemTemplate("O5 Keycard", "keyO5",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyO5.jpg", "", 0.0004,"GFX\items\keycards\O5.png")
+	it = CreateItemTemplate("O5 Keycard", "keyO5",  "GFX\items\Keycards\keycard_cl.x", "GFX\items\Inventory\INVkeyO5.jpg", "", 0.0004,"GFX\items\keycards\O5.png")
 	
 	For it = Each ItemTemplates
 		If (it\tex<>0) Then
@@ -312,6 +316,25 @@ Function InitItemTemplates()
 		EndIf
 	Next
 End Function 
+
+Function UpdateChaosDevice()
+	If keychaosstate = 0 Then
+		keychaosframe = 0
+	EndIf
+	
+	keychaosstate = keychaosstate + fpsfactor
+	
+	If keychaosstate =>200 And <400 Then
+		keychaosframe = 1
+	ElseIf keychaosstate =>400 And <600 Then
+		keychaosframe = 2
+	ElseIf keychaosstate =>600 And <800 Then
+		keychaosframe = 3
+	ElseIf keychaosstate =>800 Then
+		keychaosframe = 0
+		keychaosstate = 0
+	EndIf
+End Function
 
 Type Items
 	Field name$
@@ -800,5 +823,5 @@ Function CanUseItem(canUseWithHazmat%, canUseWithGasMask%, canUseWithEyewear%)
 	Return True
 End Function
 ;~IDEal Editor Parameters:
-;~F#66
+;~F#6A
 ;~C#Blitz3D

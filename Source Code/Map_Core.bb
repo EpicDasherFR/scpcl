@@ -2085,9 +2085,7 @@ Global SelectedDoor.Doors
 Function CreateDoor2.Doors(x#, y#, z#, angle#, room.Rooms, dopen% = False,  big% = False, keycard$ = "", locked% = False, useCollisionMesh% = False)
 	Local d.Doors, parent, i%
 	If room <> Null Then parent = room\obj
-	
 	Local d2.Doors
-	
 	d.Doors = New Doors
 	If big=1 Then
 		d\obj = CopyEntity(BigDoorOBJ[0])
@@ -2784,8 +2782,6 @@ Function UpdateElevators#(State#, door1.Doors, door2.Doors, room1, room2, event.
 End Function
 
 Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
-	Local temp% = 0
-	
 	If d\dir = 3 Then
 		If d\IsElevatorDoor = 1 Then
 			Msg = "You called the elevator."
@@ -2816,19 +2812,11 @@ Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
 		EndIf
 	ElseIf d\KeyCard<>0 Then
 		If d\locked = True Then
-			If showmsg = True Then
-				If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-					PlaySound_Strict KeyCardSFX2
-					Msg = "This door is locked."
-					MsgTimer = 70 * 7
-				EndIf
-			EndIf
 			Return
 		Else
 			If SelectedItem = Null Then
 				If showmsg = True Then
 					If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-						PlaySound_Strict KeyCardSFX2
 						Msg = "A keycard is required to operate this door."
 						MsgTimer = 70 * 7
 					EndIf
@@ -2839,7 +2827,6 @@ Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
 				If key_nokey% = 1 Then
 					If showmsg = True Then
 						If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-							PlaySound_Strict KeyCardSFX2
 							Msg = "A keycard is required to operate this door."
 							MsgTimer = 70 * 7
 						EndIf
@@ -2849,113 +2836,125 @@ Function UseDoor(d.Doors, showmsg%=True, playsfx%=True)
 					Select d\KeyCard
 						Case "cc1"
 							If key_permcc1%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with at least Containment Chamber Tier 1 Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 						Case "cc2"
 							If key_permcc2%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with at least Containment Chamber Tier 2 Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 						Case "cc3"
 							If key_permcc3%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with Containment Chamber Tier 3 Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 							
 						Case "a1"
 							If key_perma1%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with at least Armory Tier 1 Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 						Case "a2"
 							If key_perma2%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with at least Armory Tier 2 Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 						Case "a3"
 							If key_perma3%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with Armory Tier 3 Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 							
 						Case "checkp"
 							If key_permcheckp%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with Checkpoint Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 						Case "interc"
 							If key_perminterc%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with Intercom Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 						Case "exit"
 							If key_permexit%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with Exit Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
 								EndIf
 								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
 							EndIf
 						Case "nuke"
 							If key_permnuke%<>1 Then
+								PlaySound_Strict KeyCardSFX2
 								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
-									PlaySound_Strict KeyCardSFX2
 									Msg = "A keycard with Warhead Access is required to operate this door."
 									MsgTimer = 70 * 7
-								Else
-									PlaySound_Strict KeyCardSFX1
+								EndIf
+								Return
+							Else
+								PlaySound_Strict KeyCardSFX1
+							EndIf
+							
+						Case "cc2_checkp"
+							If key_permcc2%=1 And key_permcheckp%=1 Then
+								PlaySound_Strict KeyCardSFX1
+							Else
+								PlaySound_Strict KeyCardSFX2
+								If (Instr(Msg,"The keycard")=0 And Instr(Msg,"A keycard with")=0) Lor (MsgTimer<70*3) Then
+									Msg = "A keycard with Containment Chamber Tier 2 and Checkpoint access is required to operate this door."
+									MsgTimer = 70 * 7
 								EndIf
 								Return
 							EndIf
@@ -6775,7 +6774,7 @@ Function FillRoom(r.Rooms)
 		; // Mod rooms
 		Case "test"
 			;[Block]
-			d = CreateDoor2(r\x + 0.0 * RoomScale, 0, r\z + 0.0 * RoomScale, 0, r, False, 0, "cc1", True)
+			d = CreateDoor2(r\x + 0.0 * RoomScale, 0, r\z + 0.0 * RoomScale, 0, r, False, 0, "cc3", False)
 			;[End Block]
 	End Select
 	
