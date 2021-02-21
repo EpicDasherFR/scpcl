@@ -1,105 +1,115 @@
-Type Keycard
-	Field permcc1% = 0
-	Field permcc2% = 0
-	Field permcc3% = 0
-	
-	Field perma1% = 0
-	Field perma2% = 0
-	Field perma3% = 0
-	
-	Field permcheckp% = 0
-	
-	Field perminterc% = 0
-	
-	Field permexit% = 0
-	
-	Field permnuke% = 0
-End Type
+; // New clearance system made by EpicDasherFR for Containment Laboratory mod.
+; Each type of permission (containment chamber tier 2, nuke access, armory tier 3...) has a value, for each keycard, I set the values to the corresponding perms of the card.
+; When a card is used on the keycard reader, the games set the perms values to the equipped keycard, if the door needed clearance is present, the door opens.
+Global key_permcc1%
+Global key_permcc2%
+Global key_permcc3%
+
+Global key_perma1%
+Global key_perma2%
+Global key_perma3%
+
+Global key_permcheckp%
+Global key_perminterc%
+Global key_permexit%
+Global key_permnuke%
+
+Global key_nokey%
 
 Function GetKeycardPerms()
-	Local key.Keycard
-	Local temp% = 0
+	key_permcc1% = 0
+	key_permcc2% = 0
+	key_permcc3% = 0
+	
+	key_perma1% = 0
+	key_perma2% = 0
+	key_perma3% = 0
+	
+	key_permcheckp% = 0
+	key_perminterc% = 0
+	key_permexit% = 0
+	key_permnuke% = 0
+	
+	key_nokey% = 0
+	
 	Select SelectedItem\itemtemplate\tempname
 		Case "keyjanitor"
-			key\permcc1 = 1
+			key_permcc1% = 1
 		Case "keyscientist"
-			key\permcc1 = 1
-			key\permcc2 = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
 		Case "keysupervisor"
-			key\permcc1 = 1
-			key\permcc2 = 1
-			key\permcheckp = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
+			key_permcheckp% = 1
 		Case "keyengineer"
-			key\permcc1 = 1
-			key\permcc2 = 1
-			key\permcc3 = 1
-			key\permcheckp = 1
-			key\perminterc = 1
-			key\permnuke = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
+			key_permcc3% = 1
+			key_permcheckp% = 1
+			key_perminterc% = 1
+			key_permnuke% = 1
 		Case "keyguard"
-			key\permcc1 = 1
-			key\perma1 = 1
-			key\permcheckp = 1
+			key_permcc1% = 1
+			key_perma1% = 1
+			key_permcheckp% = 1
 		Case "keycadet"
-			key\permcc1 = 1
-			key\permcc2 = 1
-			key\perma1 = 1
-			key\perma2 = 1
-			key\permcheckp = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
+			key_perma1% = 1
+			key_perma2% = 1
+			key_permcheckp% = 1
 		Case "keylieutenant"
-			key\permcc1 = 1
-			key\permcc2 = 1
-			key\perma1 = 1
-			key\perma2 = 1
-			key\permcheckp = 1
-			key\permexit = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
+			key_perma1% = 1
+			key_perma2% = 1
+			key_permcheckp% = 1
+			key_permexit% = 1
 		Case "keycommander"
-			key\permcc1 = 1
-			key\permcc2 = 1
-			key\perma1 = 1
-			key\perma2 = 1
-			key\perma3 = 1
-			key\permcheckp = 1
-			key\perminterc = 1
-			key\permexit = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
+			key_perma1% = 1
+			key_perma2% = 1
+			key_perma3% = 1
+			key_permcheckp% = 1
+			key_perminterc% = 1
+			key_permexit% = 1
 		Case "keyzmanager"
-			key\permcc1 = 1
-			key\permcheckp = 1
+			key_permcc1% = 1
+			key_permcheckp% = 1
 		Case "keyfmanager"
-			key\permcc1 = 1
-			key\permcc2 = 1
-			key\permcc3 = 1
-			key\permcheckp = 1
-			key\perminterc = 1
-			key\permexit = 1
-			key\permnuke = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
+			key_permcc3% = 1
+			key_permcheckp% = 1
+			key_perminterc% = 1
+			key_permexit% = 1
+			key_permnuke% = 1
 		Case "keychaos"
-			key\permcc1 = 1
-			key\permcc2 = 1
-			key\perma1 = 1
-			key\perma2 = 1
-			key\perma3 = 1
-			key\permcheckp = 1
-			key\perminterc = 1
-			key\permexit = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
+			key_perma1% = 1
+			key_perma2% = 1
+			key_perma3% = 1
+			key_permcheckp% = 1
+			key_perminterc% = 1
+			key_permexit% = 1
 		Case "keyO5"
-			key\permcc1 = 1
-			key\permcc2 = 1
-			key\permcc3 = 1
-			key\perma1 = 1
-			key\perma2 = 1
-			key\perma3 = 1
-			key\permcheckp = 1
-			key\perminterc = 1
-			key\permexit = 1
-			key\permnuke = 1
+			key_permcc1% = 1
+			key_permcc2% = 1
+			key_permcc3% = 1
+			key_perma1% = 1
+			key_perma2% = 1
+			key_perma3% = 1
+			key_permcheckp% = 1
+			key_perminterc% = 1
+			key_permexit% = 1
+			key_permnuke% = 1
+		Default
+			key_nokey% = 1
 	End Select
 End Function
-			
-			
-			
-			
-			
 			
 			
 			
